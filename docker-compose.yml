@@ -5,7 +5,6 @@ services:
             - '5000:5000/udp'
             - '8181:8181'
             - '8282:8282/udp'
-            - '3000:3000'
         volumes:
             - './config.json:/app/config.json'
         image: datagutt/belabox-receiver

@@ -1,6 +1,6 @@
 FROM alpine:3.20 as builder
-RUN apk update &&\
-    apk upgrade &&\ 
+RUN apk update && \
+    apk upgrade && \
     apk add --no-cache linux-headers alpine-sdk cmake tcl openssl-dev zlib-dev spdlog spdlog-dev cmake
 
 WORKDIR /tmp
@@ -58,14 +58,10 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY files/sls.conf /etc/sls/sls.conf
 COPY files/supervisord.conf /etc/supervisord.conf
 COPY files/logprefix /usr/local/bin/logprefix
-COPY server/ /app
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 RUN chmod 755 /usr/local/bin/logprefix;
 
-WORKDIR /app
-RUN yarn --frozen-lockfile --production
-
-EXPOSE 5000/udp 8181/tcp 8282/udp 3000/tcp
+EXPOSE 5000/udp 8181/tcp 8282/udp
 ENTRYPOINT ["/entrypoint.sh"]
