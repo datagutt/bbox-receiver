@@ -1,4 +1,4 @@
-FROM alpine:3.21 AS builder
+FROM alpine:3.23 AS builder
 RUN apk update &&\
     apk upgrade &&\ 
     apk add --no-cache linux-headers alpine-sdk cmake tcl openssl-dev zlib-dev spdlog spdlog-dev cmake
@@ -18,7 +18,7 @@ RUN mkdir -p /build; \
 
 # belabox patched srtla
 #
-ARG SRTLA_VERSION=next
+ARG SRTLA_VERSION=main
 RUN mkdir -p /build; \
     git clone https://github.com/IRLServer/srtla.git /build/srtla; \
     cd /build/srtla; \
@@ -32,7 +32,7 @@ RUN cp /build/srtla/srtla_rec /usr/local/bin/srtla_rec
 RUN cp /build/srt/srtcore/srt_compat.h /usr/local/include/srt/
 
 ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib64
-ARG SRT_LIVE_SERVER_VERSION=master
+ARG SRT_LIVE_SERVER_VERSION=main
 # use custom irl srt server from irlserver
 RUN set -xe; \
     mkdir -p /build; \
@@ -47,7 +47,7 @@ RUN set -xe; \
 
 # runtime container with server
 #
-FROM node:alpine3.21
+FROM node:alpine3.23
 ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib64
 RUN apk add --update --no-cache openssl libstdc++ supervisor perl coreutils spdlog spdlog-dev
 
