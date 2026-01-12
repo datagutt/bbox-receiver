@@ -1,6 +1,6 @@
 # Belabox SRTLA receiver
 
-***Provided by IRLServer.com***
+***Provided by [IRLServer](https://irlserver.com)***
 
 SRTLA Belabox receiver with support for multiple streams and per-stream authentication.
 
