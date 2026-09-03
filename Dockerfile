@@ -7,7 +7,7 @@ WORKDIR /tmp
 
 # belabox patched srt
 # Pinned commit on IRLServer/srt belabox-dev branch
-ARG BELABOX_SRT_VERSION=b5690bcf9bcd7d4dee87273e6233d729ee5114dc
+ARG BELABOX_SRT_VERSION=0fc2aad3b2cba0b73c26ff8a0bba5b48717ff5b3
 RUN mkdir -p /build; \
     git clone https://github.com/IRLServer/srt.git /build/srt; \
     cd /build/srt; \
@@ -34,7 +34,7 @@ RUN cp /build/srt/srtcore/srt_compat.h /usr/local/include/srt/
 ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib64
 # use custom irl srt server from irlserver
 # Pinned commit on IRLServer/irl-srt-server main branch
-ARG SRT_LIVE_SERVER_VERSION=d45b948a71650ad683020db5fecb9fa31542f306
+ARG SRT_LIVE_SERVER_VERSION=37912ba6b5dd360a8411b960e57e1142c9293173
 RUN set -xe; \
     mkdir -p /build; \
     git clone https://github.com/IRLServer/irl-srt-server.git /build/srt-live-server; \
