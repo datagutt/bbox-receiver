@@ -1,7 +1,13 @@
 FROM alpine:3.24 AS builder
 RUN apk update &&\
     apk upgrade &&\ 
-    apk add --no-cache linux-headers alpine-sdk cmake tcl openssl-dev zlib-dev spdlog spdlog-dev cmake
+    apk add --no-cache linux-headers alpine-sdk cmake tcl openssl-dev zlib-dev spdlog spdlog-dev cmake cargo rust
+
+# rust server
+WORKDIR /app
+COPY server/Cargo.toml server/Cargo.lock ./
+COPY server/src ./src
+RUN cargo build --release --locked
 
 WORKDIR /tmp
 
@@ -48,10 +54,11 @@ RUN set -xe; \
 
 # runtime container with server
 #
-FROM node:alpine3.24
+FROM alpine:3.24
 ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib64
 RUN apk add --update --no-cache openssl libstdc++ supervisor perl coreutils spdlog spdlog-dev
 
+COPY --from=builder /app/target/release/server /app/server
 COPY --from=builder /usr/local/lib /usr/local/lib
 COPY --from=builder /usr/local/include /usr/local/include
 COPY --from=builder /usr/local/bin /usr/local/bin
@@ -59,7 +66,6 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY files/sls.conf /etc/sls/sls.conf
 COPY files/supervisord.conf /etc/supervisord.conf
 COPY files/logprefix /usr/local/bin/logprefix
-COPY server/ /app
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
